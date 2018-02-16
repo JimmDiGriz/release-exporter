@@ -36,6 +36,7 @@ class FormatBase:
         self.total_number_tags = None
         self.iter_count = None
         self.list_descriptions = []
+        self.author = 'Unknown'
 
         if not force:
             if pathlib.Path(location + os.sep + file_name + self._get_file_ext()).is_file():
@@ -74,18 +75,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
             return """\
     
-## [{tag_name}] - {date}
+## [{tag_name}] - {date} - {author}
 
 {description}
-""".format(tag_name=self.tag_name, date=self.date, description=self.description)
+""".format(tag_name=self.tag_name, date=self.date, description=self.description, author=self.author)
         else:
             return """\
 
-## {tag_name} - {date}
+## {tag_name} - {date} - {author}
 
 {description}
 
-""".format(tag_name=self.tag_name, date=self.date, description=self.description)
+""".format(tag_name=self.tag_name, date=self.date, description=self.description, author=self.author)
 
     def _footer(self):
         return """\

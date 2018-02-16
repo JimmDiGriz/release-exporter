@@ -48,9 +48,17 @@ class GitHubRequest(FormatBase):
             }
         """}
 
-        r = requests.post(url=self.api_url, json=_json, headers=self.request_headers)
+        response = json.loads(requests.post(url=self.api_url, json=_json, headers=self.request_headers).text)
+
+        if response['errors'] is not None:
+            messages = ''
+            for error in response['errors']:
+                messages += error['message'] + '; '
+
+            raise Exception(messages)
+
         try:
-            return int(json.loads(r.text)['data']['repository']['releases']['totalCount'])
+            return int(response['data']['repository']['releases']['totalCount'])
         except KeyError:
             raise KeyError('Wrong credentials given. Please check if you have the correct token.')
 
@@ -71,6 +79,9 @@ class GitHubRequest(FormatBase):
                       edges{
                         node{
                           name
+                          author {
+                            login
+                          }
                           tag{
                             name
                           }

@@ -24,7 +24,7 @@ class GitHubFormat(GitHubRequest):
         with open(self.file_name + '.' + self.file_type, 'w') as json_file:
             json.dump(self._dict_repo_template(), json_file, indent=4)
 
-        print('\n' + 'Done ' + u"\U0001F44D")
+        print('\n' + 'Done')
 
     def write_markdown(self):
         """
@@ -33,7 +33,7 @@ class GitHubFormat(GitHubRequest):
         with open('CHANGELOG.md', 'w') as md_file:
             md_file.writelines(self._converter())
 
-        print('\n' + 'Done ' + u"\U0001F44D")
+        print('\n' + 'Done')
 
     def _converter(self):
         """
@@ -62,6 +62,7 @@ class GitHubFormat(GitHubRequest):
                 self.tag_name = edge['node']['tag']['name']
                 self.description = edge['node']['description'].replace('\r\n', '\n')
                 self.date = date_convert(edge['node']['createdAt'])
+                self.author = edge['node']['author']['login']
                 self.all_content.append(self._body())
 
             pair = list(['{}...{}'.format(a, b) for a, b in zip(temp_l, ['HEAD'] + temp_l[:-1])])
@@ -119,7 +120,7 @@ class GitLabFormat(GitLabRequest):
         with open(self.file_name + '.' + self.file_type, 'w') as json_file:
             json.dump(self._dict_repo_template(), json_file, indent=4)
 
-        print('\n' + 'Done ' + u"\U0001F44D")
+        print('\n' + 'Done')
 
     def write_markdown(self):
         """
@@ -128,7 +129,7 @@ class GitLabFormat(GitLabRequest):
         with open('CHANGELOG.md', 'w') as md_file:
             md_file.writelines(self._converter())
 
-        print('\n' + 'Done ' + u"\U0001F44D")
+        print('\n' + 'Done')
 
     def _converter(self):
         """
@@ -157,6 +158,7 @@ class GitLabFormat(GitLabRequest):
                 self.tag_name = content['name']
                 self.description = content['release']['description'].replace('\r\n', '\n')
                 self.date = date_convert(content['commit']['created_at'])
+                self.author = content['author']['login']
                 self.all_content.append(self._body())
 
             pair = list(['{}...{}'.format(a, b) for a, b in zip(temp_l, ['HEAD'] + temp_l[:-1])])
